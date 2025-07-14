@@ -120,3 +120,44 @@ tr:not(.non-matching-row):hover {
   color: #868e96; /* Muted text color */
   cursor: default;
 }
+
+/* src/App.css */
+
+/* ... keep all your existing styles ... */
+
+.calendar-tab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: bottom right;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  z-index: 1000;
+  font-weight: bold;
+}
+
+.calendar-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%; /* Drawer takes up half the screen width */
+  height: 100%;
+  background-color: white;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%); /* Start off-screen */
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-drawer.open {
+  transform: translateX(0); /* Slide into view */
+}
