@@ -91,7 +91,7 @@ function App() {
             try {
                 // Fetching logic is unchanged
                 const [csvRes, xlsxRes] = await Promise.all([
-                    fetch('/final_combined_course_data.csv'),
+                    fetch('/final_combined_course_data_2026A.csv'),
                     fetch('/Prices.xlsx')
                 ]);
                 const csvArrayBuffer = await csvRes.arrayBuffer();
