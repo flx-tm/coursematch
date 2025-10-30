@@ -84,6 +84,12 @@ function App() {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [calendarView, setCalendarView] = useState('Overall'); // 'Overall', 'Q1', or 'Q2'
 
+    // Check localStorage. If 'showWelcomeModal' is 'false', it starts as false.
+    const [isModalOpen, setIsModalOpen] = useState(localStorage.getItem('showWelcomeModal') !== 'false');
+    // Add a new state to track the checkbox itself
+    const [dontShowAgain, setDontShowAgain] = useState(false);
+
+
     // --- DATA FETCHING ---
     useEffect(() => {
         const fetchFiles = async () => {
@@ -174,6 +180,16 @@ function App() {
     const toggleSession = useCallback((id) => setSelectedSessions(prev => ({ ...prev, [id]: !prev[id] })), []);
     const requestSort = useCallback((key) => setSortConfig(prev => ({ key, direction: prev.key === key && prev.direction === 'ascending' ? 'descending' : 'ascending' })), []);
     
+    // Function to handle closing the modal
+    const handleCloseModal = () => {
+        if (dontShowAgain) {
+            // Save the preference
+            localStorage.setItem('showWelcomeModal', 'false');
+        }
+        // Close the modal for this session
+        setIsModalOpen(false);
+    };
+
     const filterOptions = useMemo(() => {
         const depts = [...new Set(courses.map(c => c.Course_Code.slice(0, 4)))].sort();
         const allSections = courses.flatMap(c => c.sections || []);
@@ -444,6 +460,41 @@ function App() {
                     />
                 </div>
             </div>
+
+            {/* --- WELCOME MODAL --- */}
+            {isModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Welcome to the Course Planner! 🚀</h2>
+                        <p>Here are a few tips to get started:</p>
+                        <ul>
+                            <li>
+                                <strong>Sortable Columns:</strong> You can sort the main list by clicking on any column header, like <strong>Price</strong> or <strong>Course Rating</strong>.
+                            </li>
+                            <li>
+                                <strong>Visual Schedule:</strong> Select sections and then click the <strong>'Calendar'</strong> tab on the bottom-right to see your weekly schedule.
+                            </li>
+                            <li>
+                                <strong>Price Data:</strong> The <strong>'Price'</strong> shown is a simple average calculated from past data.
+                            </li>
+                        </ul>
+                        <div className="modal-footer">
+                            <label>
+                                <input 
+                                    type="checkbox" 
+                                    checked={dontShowAgain}
+                                    onChange={(e) => setDontShowAgain(e.target.checked)}
+                                />
+                                Don't show this again
+                            </label>
+                            <button onClick={handleCloseModal}>
+                                Got it!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* --- END WELCOME MODAL --- */}
         </>
     );
 }
