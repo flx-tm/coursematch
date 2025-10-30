@@ -363,10 +363,24 @@ function App() {
                                         <table>
                                             <thead><tr><th>Select</th><th>Section</th><th>Meetings</th><th>Instructor</th><th className="numeric">Course</th><th className="numeric">Instructor</th><th className="numeric">Difficulty</th><th className="numeric">Work</th></tr></thead>
                                             <tbody>
+                                                {/* MODIFICATION HERE:
+                                                  - Removed 'isMatch' variable
+                                                  - Removed conditional 'non-matching-row' class
+                                                  - Removed 'disabled' prop from checkbox
+                                                */}
                                                 {detailCourse.sections.map(section => {
-                                                    const { day, time, term, credits } = filters;
-                                                    const isMatch = (!day || section.Days === day) && (!time || section.Time === time) && (!term || section.Term === term) && (!credits || String(section.Credits) === credits);
-                                                    return (<React.Fragment key={section.Session_ID}>{section.instructors.map((instructor, index) => (<tr key={index} className={`banded-row ${!isMatch ? 'non-matching-row' : ''}`}>{index === 0 && <td rowSpan={section.instructors.length}><input type="checkbox" checked={!!selectedSessions[section.Session_ID]} onChange={() => toggleSession(section.Session_ID)} disabled={!isMatch} /></td>}{index === 0 && <td rowSpan={section.instructors.length}>{String(section.Session_ID).slice(-3)}</td>}{index === 0 && <td rowSpan={section.instructors.length}>{section.Meetings}</td>}<td>{instructor.name}</td><td className="numeric">{instructor.Course_Quality !== null ? instructor.Course_Quality.toFixed(2) : 'N/A'}</td><td className="numeric">{instructor.Instructor_Quality !== null ? instructor.Instructor_Quality.toFixed(2) : 'N/A'}</td><td className="numeric">{instructor.Difficulty !== null ? instructor.Difficulty.toFixed(2) : 'N/A'}</td><td className="numeric">{instructor.Work_Required !== null ? instructor.Work_Required.toFixed(2) : 'N/A'}</td></tr>))}</React.Fragment>);
+                                                    return (<React.Fragment key={section.Session_ID}>{section.instructors.map((instructor, index) => (
+                                                        <tr key={index} className="banded-row">
+                                                            {index === 0 && <td rowSpan={section.instructors.length}><input type="checkbox" checked={!!selectedSessions[section.Session_ID]} onChange={() => toggleSession(section.Session_ID)} /></td>}
+                                                            {index === 0 && <td rowSpan={section.instructors.length}>{String(section.Session_ID).slice(-3)}</td>}
+                                                            {index === 0 && <td rowSpan={section.instructors.length}>{section.Meetings}</td>}
+                                                            <td>{instructor.name}</td>
+                                                            <td className="numeric">{instructor.Course_Quality !== null ? instructor.Course_Quality.toFixed(2) : 'N/A'}</td>
+                                                            <td className="numeric">{instructor.Instructor_Quality !== null ? instructor.Instructor_Quality.toFixed(2) : 'N/A'}</td>
+                                                            <td className="numeric">{instructor.Difficulty !== null ? instructor.Difficulty.toFixed(2) : 'N/A'}</td>
+                                                            <td className="numeric">{instructor.Work_Required !== null ? instructor.Work_Required.toFixed(2) : 'N/A'}</td>
+                                                        </tr>
+                                                    ))}</React.Fragment>);
                                                 })}
                                             </tbody>
                                         </table>
